@@ -1,0 +1,54 @@
+openapi: 3.0.3
+info:
+  title: Acme Admin Portal API
+  version: 0.1.0
+paths:
+  /orders:
+    get:
+      summary: List all orders
+      responses:
+        '200':
+          description: All orders.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+  /orders/{id}:
+    get:
+      summary: Get one order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: No order has this id.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+components:
+  schemas:
+    Order:
+      type: object
+      required: [id, customer, email, total, status, createdAt]
+      properties:
+        id: { type: integer }
+        customer: { type: string }
+        email: { type: string, format: email }
+        total: { type: number }
+        status: { type: string, enum: [pending, paid, shipped, cancelled] }
+        createdAt: { type: string, format: date-time }
