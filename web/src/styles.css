@@ -10,3 +10,8 @@
 
 body { margin: 0; background: #121212; color: #e6e6e6; font-family: system-ui, sans-serif; }
 main { max-width: 1000px; margin: 0 auto; padding: 24px; }
+
+.bulk-refund { margin: 0.75rem 0; }
+.dialog-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); display: grid; place-items: center; z-index: 1000; }
+.dialog { background: #1f2430; color: inherit; padding: 1.5rem; border-radius: 8px; min-width: 320px; max-width: 90vw; }
+.dialog-actions { display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem; }

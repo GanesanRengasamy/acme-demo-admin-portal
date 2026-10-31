@@ -40,6 +40,59 @@ paths:
                 properties:
                   error:
                     type: string
+  /refunds:
+    post:
+      summary: Refund up to 50 orders in full
+      description: >
+        Idempotent. Repeating a request with the same idempotencyKey and the same orderIds
+        returns the original response and refunds nothing again. All orders are checked first;
+        if any fails, none are refunded. X-Agent-Id is recorded in the audit log and is not
+        authenticated.
+      parameters:
+        - name: X-Agent-Id
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [orderIds, idempotencyKey]
+              properties:
+                orderIds:
+                  type: array
+                  minItems: 1
+                  maxItems: 50
+                  uniqueItems: true
+                  items: { type: integer }
+                idempotencyKey: { type: string, minLength: 1 }
+      responses:
+        '201':
+          description: Orders refunded (also returned for a repeated request).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total: { type: number }
+                  refunds:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        orderId: { type: integer }
+                        amount: { type: number }
+        '400':
+          description: Invalid body, more than 50 orders, or missing X-Agent-Id.
+        '404':
+          description: An order does not exist.
+        '409':
+          description: An order is already refunded.
+        '422':
+          description: An order is not paid or shipped, or the key was used with different orders.
 components:
   schemas:
     Order:

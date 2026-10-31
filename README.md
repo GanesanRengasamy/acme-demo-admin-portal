@@ -32,3 +32,6 @@ npm test
 
 - `GET /orders` returns all orders.
 - `GET /orders/:id` returns one order, or 404.
+- `POST /refunds` refunds up to 50 orders at once. Send `orderIds` and an `idempotencyKey` in the JSON body, and your agent ID in the `X-Agent-Id` header. If you send the same request again with the same key, you get the same answer and nobody is refunded twice. Only paid and shipped orders can be refunded. Each refund is written to the audit log with who, when and the amount.
+
+The agent ID is a stand-in for real sign-in. Nothing checks it, so anyone who can reach the API can claim to be any agent. Add real authentication before using this with real money.
