@@ -1,0 +1,16 @@
+{
+  "name": "acme-demo-admin-portal",
+  "private": true,
+  "workspaces": ["server", "web"],
+  "scripts": {
+    "dev:server": "npm run dev -w server",
+    "dev:web": "npm run dev -w web",
+    "build": "npm run build -w server && npm run build -w web",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/supertest": "^6.0.2",
+    "supertest": "^7.0.0",
+    "vitest": "^2.1.8"
+  }
+}
