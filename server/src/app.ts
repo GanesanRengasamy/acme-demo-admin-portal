@@ -12,7 +12,10 @@ export function createApp() {
 
   app.get('/orders/:id', (req, res) => {
     const order = orders.find((o) => String(o.id) === req.params.id);
-    res.json(order ?? {});
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+    res.json(order);
   });
 
   return app;
