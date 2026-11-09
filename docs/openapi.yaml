@@ -9,6 +9,7 @@ paths:
       parameters:
         - name: status
           in: query
+          description: Filter orders by status
           required: false
           schema:
             type: string
