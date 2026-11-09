@@ -11,6 +11,19 @@ describe('GET /orders', () => {
     expect(res.body).toHaveLength(200);
     expect(Object.keys(res.body[0]).sort()).toEqual(['createdAt', 'customer', 'email', 'id', 'status', 'total']);
   });
+
+  it.each(['pending', 'paid', 'shipped', 'cancelled'] as const)('filters orders by valid status: %s', async (status) => {
+    const res = await request(app).get(`/orders?status=${status}`);
+    expect(res.status).toBe(200);
+    expect(res.body.length).toBeGreaterThan(0);
+    expect(res.body.every((o: { status: string }) => o.status === status)).toBe(true);
+  });
+
+  it('returns 400 for unknown status value', async () => {
+    const res = await request(app).get('/orders?status=invalid_status');
+    expect(res.status).toBe(400);
+    expect(res.body).toEqual({ error: 'Invalid status: invalid_status' });
+  });
 });
 
 describe('GET /orders/:id', () => {
