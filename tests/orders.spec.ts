@@ -13,6 +13,37 @@ describe('GET /orders', () => {
   });
 });
 
+describe('GET /orders?status=...', () => {
+  it.each(['pending', 'paid', 'shipped', 'cancelled'] as const)(
+    'filters orders by status=%s',
+    async (status) => {
+      const res = await request(app).get(`/orders?status=${status}`);
+      expect(res.status).toBe(200);
+      expect(res.body.length).toBeGreaterThan(0);
+      expect(res.body.length).toBeLessThan(200);
+      for (const order of res.body) {
+        expect(order.status).toBe(status);
+      }
+    },
+  );
+
+  it('returns 400 for an unknown status', async () => {
+    const res = await request(app).get('/orders?status=banana');
+    expect(res.status).toBe(400);
+    expect(res.body).toMatchObject({ error: expect.stringContaining('banana') });
+  });
+
+  it('returns 400 for an empty status', async () => {
+    const res = await request(app).get('/orders?status=');
+    expect(res.status).toBe(400);
+  });
+
+  it('returns 400 when multiple status query parameters are provided', async () => {
+    const res = await request(app).get('/orders?status=pending&status=paid');
+    expect(res.status).toBe(400);
+  });
+});
+
 describe('GET /orders/:id', () => {
   it('returns one order', async () => {
     const res = await request(app).get('/orders/5');
