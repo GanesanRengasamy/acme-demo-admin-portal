@@ -12,19 +12,36 @@ interface Order {
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [status, setStatus] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/api/orders')
+    const url = status ? `/api/orders?status=${encodeURIComponent(status)}` : '/api/orders';
+    fetch(url)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
       .then((data: Order[]) => setOrders(data.map((o) => ({ ...o, createdAt: new Date(o.createdAt) as unknown as string }))))
       .catch((e: Error) => setError(e.message));
-  }, []);
+  }, [status]);
 
   return (
     <section>
       <h2>Orders</h2>
       {error && <p role="alert">Could not load orders: {error}</p>}
+      <div style={{ marginBottom: '16px' }}>
+        <label htmlFor="status-filter" style={{ marginRight: '8px' }}>Status:</label>
+        <select
+          id="status-filter"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          style={{ padding: '6px 12px', background: '#1e1e1e', color: '#e6e6e6', border: '1px solid #444', borderRadius: '4px' }}
+        >
+          <option value="">All</option>
+          <option value="pending">Pending</option>
+          <option value="paid">Paid</option>
+          <option value="shipped">Shipped</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
       <GridComponent dataSource={orders} allowPaging allowSorting allowFiltering pageSettings={{ pageSize: 15 }} filterSettings={{ type: 'Menu' }}>
         <ColumnsDirective>
           <ColumnDirective field="id" headerText="ID" width="80" textAlign="Right" isPrimaryKey />

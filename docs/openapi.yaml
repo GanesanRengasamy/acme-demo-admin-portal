@@ -6,6 +6,13 @@ paths:
   /orders:
     get:
       summary: List all orders
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [pending, paid, shipped, cancelled]
       responses:
         '200':
           description: All orders.
@@ -15,6 +22,15 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Order'
+        '400':
+          description: Invalid status value.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
   /orders/{id}:
     get:
       summary: Get one order
