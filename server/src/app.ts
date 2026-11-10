@@ -2,7 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import { orders, OrderStatus } from './orders.js';
 
-const validStatuses = new Set<string>(['pending', 'paid', 'shipped', 'cancelled']);
+const VALID_STATUSES: readonly string[] = ['pending', 'paid', 'shipped', 'cancelled'] as const;
 
 export function createApp() {
   const app = express();
@@ -11,7 +11,7 @@ export function createApp() {
   app.get('/orders', (req, res) => {
     const { status } = req.query;
     if (status !== undefined) {
-      if (typeof status !== 'string' || !validStatuses.has(status)) {
+      if (typeof status !== 'string' || !VALID_STATUSES.includes(status)) {
         res.status(400).json({ error: 'Invalid status' });
         return;
       }
