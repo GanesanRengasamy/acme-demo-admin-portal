@@ -3,7 +3,7 @@
 A small demo admin portal for Acme. It has an Express API and a React front end.
 
 - `server/`: Express and TypeScript API with 200 in-memory orders.
-- `web/`: React, TypeScript and Vite. The Orders page uses the Syncfusion React Data Grid with paging, sorting and filtering in a dark theme.
+- `web/`: React, TypeScript and Vite, with a dark theme. No pages yet.
 - `tests/`: Vitest tests.
 - `docs/openapi.yaml`: API description.
 
@@ -16,8 +16,6 @@ npm install
 npm run dev:server   # API at http://localhost:3001
 npm run dev:web      # front end; proxies /api to the API
 ```
-
-To register a Syncfusion license, copy `web/.env.example` to `web/.env` and set `VITE_SYNCFUSION_LICENSE`.
 
 ## Build and test
 
