@@ -6,7 +6,7 @@
     "dev:server": "npm run dev -w server",
     "dev:web": "npm run dev -w web",
     "build": "npm run build -w server && npm run build -w web",
-    "test": "vitest run"
+    "test": "vitest run && npm test -w web"
   },
   "devDependencies": {
     "@types/supertest": "^6.0.2",
