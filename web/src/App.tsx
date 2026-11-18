@@ -1,3 +1,4 @@
+import LargeOrdersPage from './LargeOrdersPage';
 import OrdersPage from './OrdersPage';
 
 export default function App() {
@@ -5,6 +6,7 @@ export default function App() {
     <main>
       <h1>Acme Admin Portal</h1>
       <OrdersPage />
+      <LargeOrdersPage />
     </main>
   );
 }
